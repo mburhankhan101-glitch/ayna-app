@@ -71,11 +71,16 @@ class _OnboardingArtState extends State<OnboardingArt>
     // reduced-motion setting, which needs an inherited widget to read.
     //
     // Under reduced motion the controller is parked at a representative frame
-    // instead of looping: the sweep sits mid-face and the rings sit closed, so
-    // the drawing still reads as itself rather than as an empty outline.
+    // instead of looping: the sweep sits below centre and the rings sit closed,
+    // so the drawing still reads as itself rather than as an empty outline.
+    //
+    // This is also the frame every screenshot is taken on, since the harness
+    // renders with animations disabled. A parked frame that looks half-drawn is
+    // therefore not just an accessibility concern -- it is what a reviewer
+    // sees.
     if (AynaMotion.reduced(context)) {
       _ambient.stop();
-      _ambient.value = 0.5;
+      _ambient.value = 0.55;
     } else if (!_ambient.isAnimating) {
       _ambient.repeat();
     }
@@ -200,14 +205,20 @@ class _ArtPainter extends CustomPainter {
 
     // Near-round rather than a tall ellipse.
     //
-    // The panel is wider than it is tall by less than it looks, so a ratio
-    // that reads as "head-shaped" on paper came out as a long egg on screen.
-    // These two multipliers are chosen against the *rendered* box, not against
-    // face anatomy: they land within a few pixels of square on a phone.
+    // These multipliers have been wrong twice, both times because they were
+    // reasoned about instead of measured. The panel is portrait, so equal
+    // multipliers give an egg; picking them from face anatomy gives a longer
+    // egg. They are now set from an actual rendered screenshot: on a 390pt
+    // phone the panel is about 267x453, this rect is 197x335, and the face
+    // lands at roughly 154x168 -- a ratio of 0.92, which reads as a head
+    // rather than as an oval.
+    //
+    // `docs/screenshots/01-onboarding.png` is regenerable in one command, so
+    // check the picture rather than the arithmetic if these change again.
     final face = Rect.fromCenter(
       center: r.center,
-      width: r.width * 0.74,
-      height: r.height * 0.60,
+      width: r.width * 0.78,
+      height: r.height * 0.50,
     );
     canvas.drawOval(face, stroke);
 
@@ -284,7 +295,7 @@ class _ArtPainter extends CustomPainter {
           : (1 - (passed / (face.height * 0.85))).clamp(0.0, 1.0);
       // A faint resting state so the face is never an empty outline between
       // sweeps, particularly under reduced motion where the clock is parked.
-      final alpha = 0.10 + 0.48 * lit;
+      final alpha = 0.22 + 0.36 * lit;
 
       final path = Path();
       const steps = 40;

@@ -1,0 +1,12 @@
+# The screenshot generator is not a test.
+#
+# test/screenshots_test.dart renders the README images with matchesGoldenFile.
+# Left in the default suite it would compare every screen against a committed
+# PNG and fail the build on any deliberate design change -- turning a
+# documentation asset into a regression gate nobody asked for.
+#
+# Regenerate them on purpose:
+#   flutter test test/screenshots_test.dart --update-goldens --run-skipped
+tags:
+  screenshots:
+    skip: "generator, not a test -- run with --run-skipped --update-goldens"

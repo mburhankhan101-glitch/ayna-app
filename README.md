@@ -15,6 +15,27 @@ week over week.
 
 Portfolio project, not a business. Nobody is being sold anything.
 
+| | | |
+|---|---|---|
+| ![Onboarding](docs/screenshots/01-onboarding.png) | ![Home](docs/screenshots/02-home.png) | ![Result](docs/screenshots/03-result.png) |
+| Onboarding | Home, first run | The report |
+| ![Trend](docs/screenshots/04-trend.png) | ![Paywall](docs/screenshots/05-paywall.png) | ![Settings](docs/screenshots/06-settings.png) |
+| The trend (FR-8) | Paywall, showing your own locked weeks | Photo retention (NFR-4) |
+
+These are generated, not captured:
+
+```bash
+flutter test test/screenshots_test.dart --update-goldens --run-skipped
+```
+
+`test/screenshots_test.dart` renders each screen through Flutter's golden
+mechanism at 390×844 at 3x. No emulator, no device, no vendor credits, and
+byte-stable — a phone capture brings a different clock, a different status bar
+and a different scroll offset every time. It is tagged so a normal
+`flutter test` skips it: these are documentation, and a documentation asset
+should not become a regression gate that fails the build on a deliberate design
+change.
+
 ## Running it
 
 ```bash
