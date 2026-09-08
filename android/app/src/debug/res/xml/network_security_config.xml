@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  DEBUG ONLY. This file lives under src/debug, so it is merged into debug
+  builds and is physically absent from a release APK.
+
+  Android 9 and later block cleartext HTTP by default, which is correct: it
+  is 2026 and plaintext traffic on a phone is readable by anyone on the same
+  network. But the development backend runs on http://localhost:8080, reached
+  through `adb reverse`, and that traffic never leaves the USB cable.
+
+  So: cleartext is permitted for loopback and nothing else. A blanket
+  `android:usesCleartextTraffic="true"` on the application tag would have been
+  one line and would have allowed plaintext to *every* host — including, one
+  careless merge later, production.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <!-- The emulator's alias for the host machine. Harmless to keep even
+             though this project tests on a physical device. -->
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

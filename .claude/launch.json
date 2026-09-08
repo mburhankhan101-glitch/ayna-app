@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ayna-theme-preview",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": ["run", "-d", "web-server", "--web-port", "8749", "--web-hostname", "127.0.0.1"],
+      "port": 8749,
+      "url": "http://127.0.0.1:8749"
+    }
+  ]
+}
